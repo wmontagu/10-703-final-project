@@ -1,0 +1,13 @@
+Metrics to measure:
+
+Training time
+Asymptotic performance
+Sample efficiency
+
+
+Tasks:
+
+Reacher-v2 (Easy)
+HalfCheetah (Medium)
+Humaniod (Hard)
+

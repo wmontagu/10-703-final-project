@@ -1,0 +1,14 @@
+torch>=2.0.0
+gymnasium>=0.29.0
+mujoco>=3.0.0
+numpy>=1.24.0
+wandb>=0.15.0
+
+# Install:
+# From paper: https://arxiv.org/pdf/2301.04104, Mastering Diverse Domains through World Models
+# https://github.com/danijar/dreamerv3.git#egg=dreamerv3
+# From paper: https://arxiv.org/abs/2203.04955
+# https://github.com/nicklashansen/tdmpc.git#egg=tdmpc
+
+# Code from "When to Trust Your Model: Model Based Policy Optimization"
+# https://github.com/jannerm/mbpo
