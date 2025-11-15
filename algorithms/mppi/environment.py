@@ -19,6 +19,7 @@ class DynamicsModel(nn.Module):
         
         self.network = nn.Sequential(
             # Need both current state and action to know what happens next, this is important data to keep in our network.
+            # Complicated as the performance would be bad if it wasnt for Human-v2
             nn.Linear(state_dim + action_dim, hidden_dim),
             nn.ReLU(),
             nn.Linear(hidden_dim, hidden_dim),
@@ -130,7 +131,7 @@ buffer rather than the Minari dataset.
 """
 def retrain_dynamics_from_buffer(model: nn.Module, buffer_tensor: torch.Tensor, nx: int, nu: int,
                                   num_epochs: int = 20, batch_size: int = 64,
-                                  lr: float = 3e-4, device: str = 'cpu'):
+                                  lr: float = 0.0003, device: str = 'cpu'):
     buffer_size = buffer_tensor.shape[0]
 
     states = buffer_tensor[:, :nx]
