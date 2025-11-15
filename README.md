@@ -11,5 +11,6 @@ https://github.com/UM-ARM-Lab/pytorch_mppi
 
 
 Usage:
-In algorithms repo, run:
-../.venv/Scripts/python run_mppi.py
+To run MPPI, assuming your environment is named .venv: 
+    In algorithms repo, run:
+    ../.venv/Scripts/python run_mppi.py

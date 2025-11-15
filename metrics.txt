@@ -9,5 +9,5 @@ Tasks:
 
 Reacher-v2 (Easy)
 HalfCheetah (Medium)
-Humaniod (Hard)
+Human-v2 (Hard)
 
