@@ -1,4 +1,4 @@
-# This is use of an MPPI 
+# Adapted from the Github Repo below (mostly in the training mppi step)
 # https://github.com/UM-ARM-Lab/pytorch_mppi
 
 import logging
@@ -35,7 +35,17 @@ class MPPI():
                  u_max=None,
                  u_init=None,
                  U_init=None,
-                 sample_null_action=False):
+                 u_scale=1,
+                 u_per_command=1,
+                 step_dependent_dynamics=False,
+                 rollout_samples=1,
+                 rollout_var_cost=0.0,
+                 rollout_var_discount=0.95,
+                 sample_null_action=False,
+                 specific_action_sampler=None,
+                 noise_abs_cost=True
+                ):
+        
         """
         :param dynamics: function(state, action) -> next_state (K x nx) taking in batch state (K x nx) and action (K x nu)
         :param running_cost: function(state, action) -> cost (K) taking in batch state and action (same as dynamics)
@@ -114,17 +124,19 @@ class MPPI():
         self.running_cost = running_cost
         self.terminal_state_cost = terminal_state_cost
         self.sample_null_action = sample_null_action
-        
-        
+
+        self.u_per_command = u_per_command
+        self.u_scale = u_scale
+        self.step_dependency = step_dependent_dynamics
+        self.M = rollout_samples
+        self.rollout_var_cost = rollout_var_cost
+        self.rollout_var_discount = rollout_var_discount
+        self.noise_abs_cost = noise_abs_cost
+        self.specific_action_sampler = specific_action_sampler
+
         self.state = None
         self.info = None
 
-        # handling dynamics models that output a distribution (take multiple trajectory samples)
-        
-        
-        
-
-        # sampled results from last command
         self.cost_total = None
         self.cost_total_non_zero = None
         self.omega = None
@@ -336,35 +348,30 @@ class MPPI():
 
         return states[:, 1:]
 
-"""
 
-def run_mppi(mppi, env, retrain_dynamics, retrain_after_iter=50, iter=1000, render=True):
-    dataset = torch.zeros((retrain_after_iter, mppi.nx + mppi.nu), dtype=mppi.U.dtype, device=mppi.d)
+def train_mppi(mppi, env, retrain_dynamics, retrain_after_iter=100, iter=1000, render=True):
+    dataset = torch.zeros((retrain_after_iter, mppi.nx + mppi.nu + mppi.nx), dtype=mppi.U.dtype, device=mppi.d)
     total_reward = 0
     for i in range(iter):
         state = env.unwrapped.state.copy()
         command_start = time.perf_counter()
         action = mppi.command(state)
         elapsed = time.perf_counter() - command_start
-        res = env.step(action.cpu().numpy())
+        res = env.step()
         s, r = res[0], res[1]
         total_reward += r
-        logger.debug("action taken: %.4f cost received: %.4f time taken: %.5fs", action, -r, elapsed)
+        print(f"{-r} cost received: time taken: {elapsed}s")
         if render:
             env.render()
-
+        # At base, we retrain our dynamics model every 100 interations, for 20 epochs (instead of a 100). 
         di = i % retrain_after_iter
         if di == 0 and i > 0:
             retrain_dynamics(dataset)
-            # don't have to clear dataset since it'll be overridden, but useful for debugging
             dataset.zero_()
         dataset[di, :mppi.nx] = torch.tensor(state, dtype=mppi.U.dtype)
-        dataset[di, mppi.nx:] = action
+        dataset[di, mppi.nx:mppi.nx+mppi.nu] = action
+        dataset[di, mppi.nx+mppi.nu:] = torch.tensor(s, dtype=mppi.U.dtype)
     return total_reward, dataset
-"""
-# Must include my own train loop code, for the specific envs I am using
-def train_mppi(env):
-
 
 
 
