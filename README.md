@@ -9,6 +9,9 @@ Citations:
 - G. Williams et al., "Information theoretic MPC for model-based reinforcement learning," 2017 IEEE International Conference on Robotics and Automation (ICRA), Singapore, 2017, pp. 1714-1721, doi: 10.1109/ICRA.2017.7989202. keywords: {Robots;Heuristic algorithms;Trajectory;Learning (artificial intelligence);Cost function;Optimal control},
 https://github.com/UM-ARM-Lab/pytorch_mppi
 
+https://github.com/apourchot/CEM-RL.git
+
+
 
 Usage:
 To run MPPI, assuming your environment is named .venv: 
