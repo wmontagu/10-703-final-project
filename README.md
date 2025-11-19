@@ -1,4 +1,4 @@
-#10-703 Final Project: Comparing Model-Based Policy Optimization versus Pure Planning Algorithms
+# 10-703 Final Project: Comparing Model-Based Policy Optimization versus Pure Planning Algorithms
 This is a research project that aims to understand the properties of specific RL algorithms. Specifically, we will demonstrate overall efficiency and effectiveness of Model Based Policy Optimization (MBPO) techniques, over pure planning algorithms.
 We hypothesize that the hybrid, Model-Based policy optimization methods should posess improvements over pure planning algorithms. We believe that this situation is analgous to the way that hybrid Policy-Gradient and Q-learning techniques performed better than either method on its own.
 
