@@ -7,7 +7,8 @@ Sample efficiency
 
 Tasks:
 
-Reacher-v2 (Easy)
-HalfCheetah (Medium)
-Human-v2 (Hard)
+("D4RL/door/expert-v2", "Door Expert (Easy)"), - Long ass training time
+("D4RL/door/cloned-v2", "Door Cloned (Medium)"),
+("D4RL/door/human-v2", "Door Human (Hard)")  - Pretty short training time
 
+ 
