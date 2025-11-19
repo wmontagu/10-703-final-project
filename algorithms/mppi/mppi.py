@@ -352,6 +352,8 @@ class MPPI():
 def train_mppi(mppi, env, retrain_dynamics, retrain_after_iter=100, iter=1000, render=True):
     dataset = torch.zeros((retrain_after_iter, mppi.nx + mppi.nu + mppi.nx), dtype=mppi.U.dtype, device=mppi.d)
     total_reward = 0
+    # Reward tracking for graphs
+    rewards_per_iteration = []
     for i in range(iter):
         state = env.unwrapped.state.copy()
         command_start = time.perf_counter()
@@ -360,10 +362,11 @@ def train_mppi(mppi, env, retrain_dynamics, retrain_after_iter=100, iter=1000, r
         res = env.step()
         s, r = res[0], res[1]
         total_reward += r
+        rewards_per_iteration.append(r)
         print(f"{-r} cost received: time taken: {elapsed}s")
         if render:
             env.render()
-        # At base, we retrain our dynamics model every 100 interations, for 20 epochs (instead of a 100). 
+        # At base, we retrain our dynamics model every 100 interations, for 20 epochs (instead of a 100).
         di = i % retrain_after_iter
         if di == 0 and i > 0:
             retrain_dynamics(dataset)
@@ -371,7 +374,7 @@ def train_mppi(mppi, env, retrain_dynamics, retrain_after_iter=100, iter=1000, r
         dataset[di, :mppi.nx] = torch.tensor(state, dtype=mppi.U.dtype)
         dataset[di, mppi.nx:mppi.nx+mppi.nu] = action
         dataset[di, mppi.nx+mppi.nu:] = torch.tensor(s, dtype=mppi.U.dtype)
-    return total_reward, dataset
+    return total_reward, dataset, rewards_per_iteration
 
 
 

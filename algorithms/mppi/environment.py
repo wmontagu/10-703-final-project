@@ -171,7 +171,7 @@ def retrain_dynamics_from_buffer(model: nn.Module, buffer_tensor: torch.Tensor, 
         avg_loss = epoch_loss / num_batches
 
         if (epoch + 1) % 10 == 0:
-            print(f"  Retrain Epoch {epoch + 1}/{num_epochs}, Loss: {avg_loss:.6f}", flush=True)
+            print(f"  retrain epoch {epoch + 1}/{num_epochs}, loss: {avg_loss:.6f}", flush=True)
 
     model.eval()
     return model
@@ -258,5 +258,5 @@ def setup_mppi_for_minari(dataset_name: str = "D4RL/door/human-v2",
         lambda_=lambda_,
         u_min=torch.FloatTensor([-1.0] * action_dim),
         u_max=torch.FloatTensor([1.0] * action_dim),
-    )
+    ) # controller passed through run_mppi.py
     return mppi_controller, dataset, dynamics_model
